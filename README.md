@@ -1,8 +1,8 @@
 # Personal Finance Tracker
 
-A private, local-only finance app that works offline after it has been installed
-and opened once. It stores data on each device, encrypts the local vault with a
-passphrase, and does not use Clerk, MongoDB, or an API.
+A private, local-only Android finance app. Its Android package contains the
+app itself, so no Render site, web server, Clerk, MongoDB, or API is needed to
+use it. Finance data is encrypted and stored on the phone.
 
 ## Features
 
@@ -12,7 +12,7 @@ passphrase, and does not use Clerk, MongoDB, or an API.
 - Dashboard, month history, and net-worth snapshots
 - Passphrase-encrypted local data and a manual lock
 - JSON backup and restore for moving data between devices
-- Installable PWA with offline app-shell support
+- Installable Android app that works offline
 
 ## Local development
 
@@ -35,31 +35,35 @@ npm run build
 npm --prefix client test
 ```
 
-## Install
+## Build and install on Android
 
-The site must be opened online once to download and install the app shell.
-After installation and the first successful load, the app shell and data work
-offline. The host is only used to install the app and receive future app
-updates; finance data is not sent to it.
+Requirements: Node.js 20+ and Android Studio with Android SDK Platform 35 and
+Android SDK Build Tools 35.0.0.
 
-- **Android:** open the HTTPS site in Chrome, tap the menu, then **Install
-  app** or **Add to Home screen**.
-- **iPhone/iPad:** open it in Safari, tap **Share**, then **Add to Home
-  Screen**.
-- **Laptop:** use the browser's **Install app** option when available.
+From the project directory, build and open the Android project:
 
-## Deploy a separate copy
+```bash
+npm install
+npm --prefix client install
+npm run android:sync
+npm run android:open
+```
 
-This repository includes a Render Blueprint for a static site. In Render,
-choose **New → Blueprint**, connect `Pihul13/Budget-Manager-App`, and deploy
-the `render.yaml` configuration. Render will host only the installable app
-files and future updates; it receives no finance records. No API, database,
-Clerk, or secret environment variables are needed.
+In Android Studio, wait for Gradle sync, then choose **Build → Build
+Bundle(s) / APK(s) → Build APK(s)**. Copy
+`android/app/build/outputs/apk/debug/app-debug.apk` to the phone and open it to
+install. Android may ask you to allow installs from the app used to open the
+APK. The app and all finance data stay on the phone; it does not request
+internet access or Android cloud backup. To update it, build and install a
+newer APK; do not uninstall first, since uninstalling removes the local vault.
+
+The public GitHub repository stores the app's source code only. Publishing that
+source does not host or sync the app or any finance data.
 
 ## Local data, privacy, and recovery
 
-- Each device has its own separate local vault. There is no automatic phone to
-  laptop synchronization; use export and restore to move a backup manually.
+- Each installation has its own local vault. There is no automatic sync with
+  your laptop; use export and restore to move a backup manually.
 - The vault is encrypted in IndexedDB using AES-GCM with a key derived from
   your passphrase. The app locks when you choose **Lock** and after it has
   been in the background for one minute.
@@ -77,11 +81,11 @@ Clerk, or secret environment variables are needed.
 
 ## Migrating existing records
 
-Before switching the deployed site to this local-only version, sign in to the
-current hosted app and export a JSON backup from **Settings → Backup & restore**.
-On the new app's first launch, select that backup while creating your local
-vault. Restore it separately on each device that needs the data. Keep the
-original backup until you have verified the imported records on both devices.
+If you want records from the existing hosted app, export a JSON backup from
+**Settings → Backup & restore**. On the Android app's first launch, select
+that backup while creating your local vault. Keep the original backup until
+you verify the imported records. This Android app is separate and does not
+change the old hosted app or its database.
 
 The new app does not connect to or delete the old Atlas database. Do not remove
 the old database until migration and backup verification are complete.

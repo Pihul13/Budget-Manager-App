@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Capacitor } from "@capacitor/core";
 import App from "./App.jsx";
 import { lockApp, setAppLockCallback } from "./lib/appLock.js";
 import {
@@ -26,11 +27,15 @@ export default function LocalGate() {
         setMode("error");
       });
 
-    if (import.meta.env.PROD && "serviceWorker" in navigator) {
+    if (
+      import.meta.env.PROD &&
+      !Capacitor.isNativePlatform() &&
+      "serviceWorker" in navigator
+    ) {
       navigator.serviceWorker.register("/service-worker.js").catch((reason) => {
         console.error("Could not enable offline app support.", reason);
       });
-    } else if ("serviceWorker" in navigator) {
+    } else if (!Capacitor.isNativePlatform() && "serviceWorker" in navigator) {
       navigator.serviceWorker.getRegistration().then((registration) => {
         if (registration?.active?.scriptURL.endsWith("/service-worker.js")) {
           registration.unregister();
@@ -104,8 +109,8 @@ export default function LocalGate() {
         <span className="eyebrow">Private, on this device</span>
         <h1>{mode === "setup" ? "Create your local vault" : "Unlock your vault"}</h1>
         <p>
-          Your records are encrypted on this device. They are not sent to
-          Render, Clerk, or a cloud database.
+          Your records are encrypted on this device. The app does not upload
+          them to a server.
         </p>
         {mode !== "error" && (
           <form className="auth-actions" onSubmit={enter}>

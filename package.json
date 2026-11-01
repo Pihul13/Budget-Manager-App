@@ -2,8 +2,26 @@
   "name": "personal-finance-tracker",
   "private": true,
   "scripts": {
+    "android:sync": "npm run build && npx cap sync android",
+    "android:open": "npx cap open android",
     "dev": "npm --prefix client run dev",
     "client": "npm --prefix client run dev",
     "build": "npm --prefix client run build"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.6.10",
+    "@capacitor/core": "^7.6.10",
+    "@capacitor/filesystem": "^7.1.4",
+    "@capacitor/share": "^7.0.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.6.10"
+  },
+  "overrides": {
+    "@capacitor/cli": {
+      "rimraf": {
+        "glob": "^14.0.3"
+      }
+    }
   }
 }

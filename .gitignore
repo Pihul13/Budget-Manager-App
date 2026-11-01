@@ -8,3 +8,6 @@ node_modules/
 .DS_Store
 dist/
 *.log
+android/.gradle/
+android/local.properties
+android/**/build/

@@ -1,3 +1,6 @@
+import { Capacitor } from "@capacitor/core";
+import { Directory, Filesystem } from "@capacitor/filesystem";
+import { Share } from "@capacitor/share";
 import {
   createLocalId,
   exportLocalBackup,
@@ -792,8 +795,22 @@ export async function localApiRequest(url, options = {}) {
   return handleWrite(method, parsed.pathname, body);
 }
 
-export function createBackupDownload(payload) {
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+export async function createBackupDownload(payload) {
+  const contents = JSON.stringify(payload, null, 2);
+  if (Capacitor.isNativePlatform()) {
+    const file = await Filesystem.writeFile({
+      path: "personal-finance-backup.json",
+      data: contents,
+      directory: Directory.Cache,
+    });
+    await Share.share({
+      title: "Finance backup",
+      url: file.uri,
+      dialogTitle: "Save your finance backup",
+    });
+    return;
+  }
+  const blob = new Blob([contents], { type: "application/json" });
   const objectUrl = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = objectUrl;

@@ -1,0 +1,5 @@
+{
+  "appId": "com.pihul13.budgetmanager",
+  "appName": "Budget Manager",
+  "webDir": "client/dist"
+}

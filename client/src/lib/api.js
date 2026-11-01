@@ -14,5 +14,5 @@ export const api = {
 };
 
 export async function downloadBackup() {
-  createBackupDownload(await localApiRequest("/api/backup/export"));
+  await createBackupDownload(await localApiRequest("/api/backup/export"));
 }

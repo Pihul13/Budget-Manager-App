@@ -45,7 +45,7 @@ export default function Settings({
   const localSave = async () => {
     try {
       await downloadBackup();
-      setMsg("Backup exported to your laptop.");
+      setMsg("Backup exported.");
     } catch (e) {
       setMsg(e.message);
     }
