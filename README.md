@@ -48,6 +48,14 @@ updates; finance data is not sent to it.
   Screen**.
 - **Laptop:** use the browser's **Install app** option when available.
 
+## Deploy a separate copy
+
+This repository includes a Render Blueprint for a static site. In Render,
+choose **New → Blueprint**, connect `Pihul13/Budget-Manager-App`, and deploy
+the `render.yaml` configuration. Render will host only the installable app
+files and future updates; it receives no finance records. No API, database,
+Clerk, or secret environment variables are needed.
+
 ## Local data, privacy, and recovery
 
 - Each device has its own separate local vault. There is no automatic phone to
